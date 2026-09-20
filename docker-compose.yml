@@ -1,0 +1,136 @@
+# OpenImperia — stack Docker per il portale Open Data basato su CKAN.
+#
+# Modellato sul progetto ufficiale ckan-docker
+# (https://github.com/ckan/ckan-docker), aggiungendo:
+#   - l'estensione locale ckanext-openimperia (servizio ckan)
+#   - un container "collectors" che esegue i collector Python via cron
+#
+# Avvio:  cp .env.example .env   (e inserire CKAN_API_KEY reale)
+#         docker compose up --build -d
+# Portale: http://localhost:5000
+
+services:
+
+  db:
+    build:
+      context: docker/postgres
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - CKAN_DB_USER
+      - CKAN_DB_PASSWORD
+      - CKAN_DB
+      - DATASTORE_READONLY_USER
+      - DATASTORE_READONLY_PASSWORD
+      - DATASTORE_DB
+    networks:
+      - dbnet
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  solr:
+    image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
+    networks:
+      - solrnet
+    volumes:
+      - solr_data:/var/solr
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    networks:
+      - redisnet
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  datapusher:
+    image: ckan/ckan-base-datapusher:${DATAPUSHER_VERSION}
+    networks:
+      - ckannet
+      - dbnet
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8800"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  ckan:
+    build:
+      context: .
+      dockerfile: docker/ckan/Dockerfile
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ckannet
+      - dbnet
+      - solrnet
+      - redisnet
+    ports:
+      - "${CKAN_PORT_HOST:-5000}:5000"
+    volumes:
+      - ckan_storage:/var/lib/ckan
+      # Sviluppo: per modificare template/css dell'estensione senza rebuild,
+      # scommentare la riga e riavviare il container:
+      # - ./ckan/src/ckanext-openimperia:/srv/app/src_extensions/ckanext-openimperia
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000/api/action/status_show"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  collectors:
+    build:
+      context: .
+      dockerfile: docker/collectors/Dockerfile
+    env_file: .env
+    environment:
+      # Dentro la rete Docker CKAN non è raggiungibile su localhost
+      CKAN_URL: http://ckan:5000
+    depends_on:
+      ckan:
+        condition: service_healthy
+    networks:
+      - ckannet
+    restart: unless-stopped
+
+networks:
+  ckannet:
+  dbnet:
+    internal: true
+  solrnet:
+    internal: true
+  redisnet:
+    internal: true
+
+volumes:
+  ckan_storage:
+  pg_data:
+  solr_data:

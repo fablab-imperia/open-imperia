@@ -1,0 +1,8 @@
+# Install with:
+# sudo cp cron/openimperia /etc/cron.d/openimperia
+# sudo chmod 0644 /etc/cron.d/openimperia
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+0 3 * * * openimperia cd /opt/openimperia && /opt/openimperia/scripts/update-all.sh >> /var/log/openimperia.log 2>&1
