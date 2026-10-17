@@ -9,7 +9,15 @@ Dominio previsto: **dati.fablabimperia.org**.
 
 ## 1. Prerequisiti sul VPS
 
-Accedi via SSH come utente con privilegi `sudo`. Sistema aggiornato:
+L'immagine **Debian 13 (trixie)** di IONOS fornisce l'accesso come `root`; in tal
+caso ometti `sudo` dai comandi seguenti (o crea un utente con `adduser` e
+assegnagli `sudo`). Verifica la versione:
+
+```bash
+cat /etc/debian_version
+```
+
+Sistema aggiornato e strumenti di base:
 
 ```bash
 sudo apt update && sudo apt upgrade -y
@@ -56,6 +64,9 @@ sudo ufw status
 
 > Se usi il firewall del pannello IONOS, apri lì le stesse porte (22, 80, 443)
 > e chiudi tutto il resto.
+
+> Debian 13 usa `nftables` come backend del firewall: `ufw` lo gestisce
+> correttamente, non serve configurare `nftables` a mano.
 
 ---
 
