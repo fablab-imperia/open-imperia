@@ -1,0 +1,36 @@
+# Caddy — reverse proxy con HTTPS automatico (Let's Encrypt) per OpenImperia.
+#
+# L'indirizzo del sito è definito dalla variabile d'ambiente SITE_ADDRESS
+# (impostata in .env / docker-compose.prod.yml). Con un dominio reale Caddy
+# ottiene e rinnova automaticamente il certificato TLS.
+#
+# Per un test senza DNS configurato si può impostare SITE_ADDRESS=:80 nel .env
+# e il portale sarà raggiungibile in HTTP su http://<IP-del-VPS>.
+
+{$SITE_ADDRESS} {
+	# Notifica a Let's Encrypt; ACME_EMAIL arriva dall'ambiente.
+	tls {$ACME_EMAIL}
+
+	encode zstd gzip
+
+	# Intestazioni di sicurezza.
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# Dimensione massima dei caricamenti (dataset con file allegati).
+	request_body {
+		max_size 200MB
+	}
+
+	reverse_proxy ckan:5000
+
+	log {
+		output stdout
+		format console
+	}
+}

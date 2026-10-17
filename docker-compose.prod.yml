@@ -1,0 +1,189 @@
+# OpenImperia — stack di produzione (VPS IONOS, Debian 13, 4 GB RAM).
+#
+# Differenze rispetto a docker-compose.yml (sviluppo):
+#   - Caddy come reverse proxy con HTTPS automatico (Let's Encrypt)
+#   - la porta di CKAN NON è pubblicata su Internet (solo 127.0.0.1 per debug)
+#   - limiti di memoria e tuning tarati su 4 GB di RAM
+#   - nessun default insicuro: i segreti arrivano dal file .env
+#
+# Avvio:
+#   cp .env.prod.example .env      # poi inserire i segreti reali
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Aggiornamento:
+#   git pull
+#   docker compose -f docker-compose.prod.yml up -d --build
+
+services:
+
+  db:
+    build:
+      context: docker/postgres
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - CKAN_DB_USER
+      - CKAN_DB_PASSWORD
+      - CKAN_DB
+      - DATASTORE_READONLY_USER
+      - DATASTORE_READONLY_PASSWORD
+      - DATASTORE_DB
+    # Tuning PostgreSQL per 4 GB di RAM totali.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=192MB
+      - -c
+      - effective_cache_size=768MB
+      - -c
+      - work_mem=8MB
+      - -c
+      - maintenance_work_mem=64MB
+      - -c
+      - max_connections=100
+    networks:
+      - dbnet
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    mem_limit: 512m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  solr:
+    image: ckan/ckan-solr:${SOLR_IMAGE_VERSION}
+    # Heap ridotto: adeguato a un catalogo di piccole dimensioni.
+    environment:
+      - SOLR_JAVA_MEM=-Xms256m -Xmx768m
+    networks:
+      - solrnet
+    volumes:
+      - solr_data:/var/solr
+    mem_limit: 1024m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    networks:
+      - redisnet
+    mem_limit: 128m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  datapusher:
+    image: ckan/ckan-base-datapusher:${DATAPUSHER_VERSION}
+    networks:
+      - ckannet
+      - dbnet
+    mem_limit: 384m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8800"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  ckan:
+    build:
+      context: .
+      dockerfile: docker/ckan/Dockerfile
+    image: openimperia/ckan:2.11
+    env_file: .env
+    environment:
+      # URL pubblico: Caddy termina TLS e inoltra a ckan:5000.
+      - CKAN_SITE_URL=${CKAN_SITE_URL:-https://dati.fablabimperia.org}
+      - UWSGI_HARAKIRI=60
+    depends_on:
+      db:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ckannet
+      - dbnet
+      - solrnet
+      - redisnet
+    ports:
+      # Non esposto su Internet: accessibile solo da localhost (tunnel SSH)
+      # per debug. Il traffico pubblico passa da Caddy.
+      - "127.0.0.1:5000:5000"
+    volumes:
+      - ckan_storage:/var/lib/ckan
+    mem_limit: 1024m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000/api/action/status_show"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      - SITE_ADDRESS=${SITE_ADDRESS:-dati.fablabimperia.org}
+      # Email per l'account Let's Encrypt (avvisi di scadenza certificati).
+      - ACME_EMAIL=${ACME_EMAIL:-fablabimperia@gmail.com}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - ckannet
+    depends_on:
+      - ckan
+    mem_limit: 128m
+    restart: unless-stopped
+
+  collectors:
+    build:
+      context: .
+      dockerfile: docker/collectors/Dockerfile
+    env_file: .env
+    environment:
+      # Dentro la rete Docker CKAN non è raggiungibile su localhost.
+      - CKAN_URL=http://ckan:5000
+    depends_on:
+      ckan:
+        condition: service_healthy
+    networks:
+      - ckannet
+    mem_limit: 256m
+    restart: unless-stopped
+
+networks:
+  ckannet:
+  dbnet:
+    internal: true
+  solrnet:
+    internal: true
+  redisnet:
+    internal: true
+
+volumes:
+  ckan_storage:
+  pg_data:
+  solr_data:
+  caddy_data:
+  caddy_config:

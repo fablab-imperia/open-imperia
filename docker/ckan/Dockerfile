@@ -14,4 +14,7 @@ COPY --chown=ckan:ckan-sys ckan/src/ckanext-openimperia /srv/app/src_extensions/
 
 USER root
 RUN pip install -e /srv/app/src_extensions/ckanext-openimperia
+# Hook di avvio: crea l'organizzazione di default dopo l'init del DB
+COPY docker/ckan/docker-entrypoint.d/10-openimperia-init.sh /docker-entrypoint.d/10-openimperia-init.sh
+RUN chmod +x /docker-entrypoint.d/10-openimperia-init.sh
 USER ckan

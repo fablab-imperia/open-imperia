@@ -78,6 +78,7 @@ services:
     build:
       context: .
       dockerfile: docker/ckan/Dockerfile
+    image: openimperia/ckan:2.11
     env_file: .env
     depends_on:
       db:

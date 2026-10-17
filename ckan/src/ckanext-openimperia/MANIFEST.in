@@ -1,2 +1,3 @@
 recursive-include ckanext/openimperia/templates *
 recursive-include ckanext/openimperia/public *
+include ckanext/openimperia/licenses_group.json

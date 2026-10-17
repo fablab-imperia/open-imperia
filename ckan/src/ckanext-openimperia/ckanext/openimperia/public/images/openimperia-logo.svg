@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="56" viewBox="0 0 260 56" role="img" aria-label="Open Data Imperia">
+  <title>Open Data Imperia</title>
+  <g>
+    <rect x="2" y="6" width="44" height="44" rx="10" fill="#0b5394"/>
+    <path d="M8 32 Q17 24 26 32 T44 32" fill="none" stroke="#e8a33d" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M8 40 Q17 32 26 40 T44 40" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="24" cy="18" r="4" fill="#ffffff"/>
+  </g>
+  <text x="58" y="30" font-family="'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="700" fill="#0b5394">Open Data</text>
+  <text x="58" y="49" font-family="'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="1.5" fill="#073b6b">IMPERIA</text>
+</svg>
