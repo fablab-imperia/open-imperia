@@ -1,25 +1,51 @@
-/* =====================================================================
-   Open Data Imperia — personalizzazione grafica di CKAN
-   Palette ispirata al mare ligure e all'identità del territorio di Imperia.
-   ===================================================================== */
+/* Open Data Imperia — tema editoriale, chiaro e ad alto contrasto. */
 
 :root {
-  --oi-primary: #0b5394;
-  --oi-primary-dark: #073b6b;
-  --oi-primary-darker: #052a4d;
-  --oi-accent: #e8a33d;
-  --oi-surface: #f4f7fb;
-  --oi-text: #1f2933;
+  --oi-primary: #1768a6;
+  --oi-primary-dark: #104e7d;
+  --oi-primary-darker: #0b4268;
+  --oi-accent: #7ad7f0;
+  --oi-surface: #f5f7f9;
+  --oi-paper: #ffffff;
+  --oi-border: #d8e0e7;
+  --oi-text: #202b35;
+  --oi-muted: #5c6874;
+}
+
+body {
+  background: var(--oi-paper);
+  color: var(--oi-text);
+  font-family: "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
 }
 
 /* ---------------------------------------------------------------------
    Header / navigazione
    --------------------------------------------------------------------- */
 .account-masthead {
-  background-color: var(--oi-primary-darker);
+  background-color: var(--oi-primary);
+  border-bottom: 1px solid #0f568c;
 }
 
 .masthead {
+  background: #eaf6fc !important;
+  border-bottom: 3px solid var(--oi-primary);
+}
+
+/* CKAN applica lo sfondo anche ai contenitori interni della navigazione. */
+.masthead .navbar,
+.masthead .navbar-collapse,
+.masthead .navigation,
+.masthead .section {
+  background-color: #eaf6fc;
+}
+
+.masthead .navbar-toggler {
+  background-color: var(--oi-primary);
+}
+
+.masthead .navbar-toggler:hover,
+.masthead .navbar-toggler:focus {
   background-color: var(--oi-primary);
 }
 
@@ -27,30 +53,50 @@
 .masthead .navbar .nav-link,
 .masthead .navbar h1 a,
 .masthead .navbar h2 {
-  color: #ffffff;
+  color: var(--oi-primary-darker);
+  font-weight: 600;
 }
 
 .masthead .navbar a:hover,
 .masthead .navbar .nav-link:hover {
-  color: var(--oi-accent);
+  color: var(--oi-primary);
 }
 
 .masthead .site-search .form-control {
-  border: none;
+  border: 1px solid #b8c5d0;
+  box-shadow: none;
 }
 
 .masthead .site-search .btn {
-  background-color: var(--oi-primary-dark);
+  background-color: var(--oi-primary);
+  color: #ffffff;
+}
+
+.account-masthead .account ul li a,
+.account-masthead .account ul li a:hover {
   color: #ffffff;
 }
 
 /* ---------------------------------------------------------------------
    Home page — hero
    --------------------------------------------------------------------- */
+.homepage {
+  background-color: #f8fbfd;
+}
+
 .homepage .hero {
-  background: linear-gradient(135deg, var(--oi-primary) 0%, var(--oi-primary-dark) 100%);
-  color: #ffffff;
-  padding: 3.5rem 0;
+  background: #fbfdff;
+  border-bottom: 1px solid var(--oi-border);
+  color: var(--oi-text);
+  padding: 4.5rem 0 4rem;
+}
+
+.homepage .hero .container {
+  max-width: 1140px;
+}
+
+.homepage .hero .row {
+  align-items: center;
 }
 
 .openimperia-hero-kicker {
@@ -58,83 +104,145 @@
   letter-spacing: 0.12em;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--oi-accent);
-  margin-bottom: 0.5rem;
+  color: var(--oi-primary);
+  margin-bottom: 0.75rem;
 }
 
 .openimperia-hero-title {
-  font-size: 2.75rem;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
   font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-  color: #ffffff;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  margin-bottom: 1.15rem;
+  color: var(--oi-primary-darker);
 }
 
 .openimperia-hero-lead {
-  font-size: 1.15rem;
-  max-width: 34rem;
-  margin-bottom: 1.5rem;
+  color: var(--oi-muted);
+  font-size: 1.2rem;
+  max-width: 36rem;
+  margin-bottom: 1.75rem;
 }
 
 .openimperia-hero-actions .btn {
-  margin-right: 0.5rem;
+  border-radius: 3px;
+  font-weight: 700;
+  margin: 0 0.5rem 0.5rem 0;
+  padding: 0.7rem 1.25rem;
 }
 
 .openimperia-hero-actions .btn-primary {
-  background-color: var(--oi-accent);
-  border-color: var(--oi-accent);
-  color: var(--oi-text);
-  font-weight: 600;
-}
-
-.openimperia-hero-actions .btn-secondary {
-  background-color: transparent;
-  border-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--oi-primary);
+  border-color: var(--oi-primary);
   color: #ffffff;
 }
 
-.openimperia-hero-actions .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+.openimperia-hero-actions .btn-primary:hover,
+.openimperia-hero-actions .btn-primary:focus {
+  background-color: var(--oi-primary-dark);
+  border-color: var(--oi-primary-dark);
 }
 
-/* La ricerca nella hero resta leggibile su fondo scuro */
+.openimperia-hero-actions .btn-secondary {
+  background-color: #ffffff;
+  border-color: #9eafbd;
+  color: var(--oi-primary-dark);
+}
+
+.openimperia-hero-actions .btn-secondary:hover {
+  background-color: #edf4f8;
+  border-color: var(--oi-primary);
+  color: var(--oi-primary-dark);
+}
+
+/* La ricerca è trattata come un modulo informativo indipendente. */
 .homepage .hero .module-search {
+  background-color: #e4f3fb !important;
+  background-image: none !important;
+  border: 1px solid #b8dce9;
+  border-top: 4px solid var(--oi-primary);
+  box-shadow: 0 8px 22px rgba(23, 50, 77, 0.08);
   color: var(--oi-text);
+  padding: 1.5rem;
+}
+
+.homepage .hero .module-search .module-content,
+.homepage .hero .module-search .module-content:first-child {
+  background: transparent;
+}
+
+.homepage .hero .module-search .module-heading {
+  color: var(--oi-primary-darker);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.homepage .hero .module-search .search-giant input {
+  border: 1px solid #aebdca;
+  color: var(--oi-text);
+}
+
+.homepage .hero .module-search .search-giant .btn {
+  background: var(--oi-primary);
+  color: #ffffff;
+}
+
+/* Argomenti più cercati: azzurro pieno, meno cupo del tema CKAN di base. */
+.tags {
+  background-color: var(--oi-primary);
+}
+
+.tags h3,
+.tags a {
+  color: #ffffff;
+}
+
+.tags a:hover,
+.tags a:focus {
+  color: #dff4fc;
 }
 
 /* ---------------------------------------------------------------------
    Home page — schede informative
    --------------------------------------------------------------------- */
 .module-feeds {
-  background-color: var(--oi-surface);
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
+  background-color: #f2f8fc;
+  border-bottom: 1px solid var(--oi-border);
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
 }
 
 .openimperia-card {
   height: 100%;
-  border: none;
+  background: var(--oi-paper);
+  border: 1px solid var(--oi-border);
   border-left: 4px solid var(--oi-primary);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+  border-radius: 0;
+  box-shadow: 0 2px 7px rgba(23, 50, 77, 0.06);
 }
 
 .openimperia-card-body {
-  padding: 1.5rem 1.75rem;
+  padding: 1.7rem 1.85rem;
 }
 
 .openimperia-card h2 {
   font-size: 1.3rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--oi-primary-dark);
   margin-bottom: 0.75rem;
+}
+
+.openimperia-card p {
+  color: var(--oi-muted);
 }
 
 /* ---------------------------------------------------------------------
    Footer
    --------------------------------------------------------------------- */
 .site-footer {
-  background-color: var(--oi-primary-darker);
-  color: rgba(255, 255, 255, 0.85);
+  background-color: rgb(23, 104, 166);
+  border-top: 3px solid var(--oi-primary);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .site-footer a {
@@ -142,10 +250,25 @@
 }
 
 .site-footer a:hover {
-  color: var(--oi-accent);
+  color: #dff4fc;
 }
 
 .openimperia-footer-note {
   font-size: 0.85rem;
   margin-top: 0.5rem;
+}
+
+@media (max-width: 767px) {
+  .homepage .hero {
+    padding: 2.75rem 0;
+  }
+
+  .homepage .hero .module-search {
+    margin-top: 2rem;
+  }
+
+  .module-feeds {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
 }

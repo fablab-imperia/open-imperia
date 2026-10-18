@@ -96,9 +96,8 @@ services:
       - "${CKAN_PORT_HOST:-5000}:5000"
     volumes:
       - ckan_storage:/var/lib/ckan
-      # Sviluppo: per modificare template/css dell'estensione senza rebuild,
-      # scommentare la riga e riavviare il container:
-      # - ./ckan/src/ckanext-openimperia:/srv/app/src_extensions/ckanext-openimperia
+      # Sviluppo: usa direttamente template e CSS locali, senza rebuild.
+      - ./ckan/src/ckanext-openimperia:/srv/app/src_extensions/ckanext-openimperia
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000/api/action/status_show"]
