@@ -6,26 +6,46 @@
 
 {% block promoted %}
 <div class="openimperia-hero-copy">
-  <p class="openimperia-hero-kicker">Fablab Imperia APS · Portale civico</p>
+  <p class="openimperia-hero-kicker">Comune di Imperia</p>
   <h1 class="openimperia-hero-title">Open Data Imperia</h1>
   <p class="openimperia-hero-lead">
-    I dati pubblici del territorio, pubblicati in formati aperti e
-    liberamente riutilizzabili da cittadini, imprese e associazioni.
+    Dati aperti per una città più trasparente, partecipata, innovativa.
+    Il portale dei dati pubblici del Comune di Imperia, per favorire la
+    conoscenza, il riuso e lo sviluppo del territorio.
   </p>
   <p class="openimperia-hero-actions" aria-label="Azioni principali">
     <a class="btn btn-primary" href="{{ h.url_for('dataset.search') }}">
-      {{ _("Esplora i dataset") }}
-    </a>
-    <a class="btn btn-secondary" href="{{ h.url_for('home.about') }}">
-      {{ _("Cos'è l'open data?") }}
+      {{ _("Esplora i dataset") }} <span aria-hidden="true">›</span>
     </a>
   </p>
 </div>
 {% endblock %}
 
+{% block search %}
+<section class="openimperia-search" aria-labelledby="openimperia-search-title">
+  <h2 id="openimperia-search-title">{{ _("Cerca i dati") }}</h2>
+  <form action="{{ h.url_for('dataset.search') }}" method="get" class="openimperia-search-form">
+    <label class="visually-hidden" for="field-oi-search">{{ _("Cerca nei dataset") }}</label>
+    <div class="openimperia-search-input">
+      <input id="field-oi-search" type="search" name="q" value="" placeholder="{{ _('Per es. ambiente') }}" autocomplete="off">
+      <button type="submit" aria-label="{{ _('Cerca') }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
+      </button>
+    </div>
+    <a class="openimperia-advanced-search" href="{{ h.url_for('dataset.search') }}">
+      {{ _("Ricerca avanzata") }} <span aria-hidden="true">›</span>
+    </a>
+  </form>
+</section>
+{% endblock %}
+
 {% block featured_group %}
 <div class="openimperia-card card">
   <div class="openimperia-card-body">
+    <div class="openimperia-card-icon" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="M7 3h18v24l-5 3-5-3-5 3-3-2V3Zm5 6h8m-8 5h8m-8 5h5"/></svg>
+    </div>
+    <div class="openimperia-card-copy">
     <h2>{{ _("Che cosa sono gli open data") }}</h2>
     <p>
       Sono dati che chiunque può usare, riutilizzare e ridistribuire
@@ -35,6 +55,8 @@
       Le informazioni pubbliche diventano così una base comune su cui
       costruire servizi, analisi e applicazioni.
     </p>
+    <a class="openimperia-text-link" href="{{ h.url_for('home.about') }}">{{ _("Scopri di più") }} <span aria-hidden="true">›</span></a>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -42,7 +64,11 @@
 {% block featured_organization %}
 <div class="openimperia-card card">
   <div class="openimperia-card-body">
-    <h2>{{ _("Trasparenza e normativa") }}</h2>
+    <div class="openimperia-card-icon" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="M16 3 27 8v7c0 7-4.7 11.5-11 14-6.3-2.5-11-7-11-14V8l11-5Zm-5 12 3 3 7-7"/></svg>
+    </div>
+    <div class="openimperia-card-copy">
+    <h2>{{ _("Trasparenza e normative") }}</h2>
     <p>
       Il portale nasce nel solco delle norme italiane su trasparenza e
       riuso dei dati pubblici (D.Lgs. 33/2013, D.Lgs. 36/2006 e linee guida
@@ -52,6 +78,7 @@
       I dataset sono pubblicati con licenze aperte, di default
       <strong>CC BY 4.0</strong>.
     </p>
+    </div>
   </div>
 </div>
 {% endblock %}

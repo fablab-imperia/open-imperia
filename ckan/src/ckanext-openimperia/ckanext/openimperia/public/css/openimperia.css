@@ -1,274 +1,57 @@
-/* Open Data Imperia — tema editoriale, chiaro e ad alto contrasto. */
+/* Open Data Imperia — civic portal theme. */
+:root { --oi-navy:#063d78; --oi-navy-deep:#04345f; --oi-blue:#008dbd; --oi-yellow:#ffc42f; --oi-body:#245989; --oi-border:#aad8ef; }
+body { color:var(--oi-body); font-family:"Noto Sans", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif; font-size:15px; line-height:1.55; }
+.visually-hidden, .sr-only { position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-:root {
-  --oi-primary: #1768a6;
-  --oi-primary-dark: #104e7d;
-  --oi-primary-darker: #0b4268;
-  --oi-accent: #7ad7f0;
-  --oi-surface: #f5f7f9;
-  --oi-paper: #ffffff;
-  --oi-border: #d8e0e7;
-  --oi-text: #202b35;
-  --oi-muted: #5c6874;
-}
+/* Header */
+.account-masthead { min-height:34px; background:linear-gradient(100deg,#064677,var(--oi-navy-deep)); border:0; }
+.account-masthead .account ul li, .account-masthead .account ul li a { border:0; }
+.account-masthead .account ul li a, .account-masthead .account ul li a:hover { color:#fff; font-weight:700; }
+.masthead { min-height:80px; background:rgba(255,255,255,.97)!important; border:0; box-shadow:0 1px 0 rgba(6,61,120,.08); }
+.masthead .container { min-height:80px; }
+.masthead .navbar, .masthead .navbar-collapse, .masthead .navigation, .masthead .section { background:transparent; }
+.masthead .logo { margin-top:11px; }.masthead .logo img { max-height:58px; }
+.masthead .navigation .nav-pills>li>a, .masthead .navbar .nav-link, .masthead .navbar a { color:var(--oi-navy); font-size:16px; font-weight:700; }
+.masthead .navigation .nav-pills>li>a:hover, .masthead .navigation .nav-pills>li.active>a, .masthead .navbar a:hover { background:transparent; color:var(--oi-blue); }
+.masthead .site-search { margin-top:21px; }
+.masthead .site-search .form-control { height:37px; border:1px solid #b8d7e9; border-radius:7px 0 0 7px; box-shadow:none; color:var(--oi-body); }
+.masthead .site-search .btn { min-width:46px; height:37px; background:var(--oi-blue); border:0; border-radius:0 7px 7px 0; color:#fff; }
+.masthead .navbar-toggler { background:var(--oi-blue); }
 
-body {
-  background: var(--oi-paper);
-  color: var(--oi-text);
-  font-family: "Noto Sans", "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.6;
-}
+/* Hero: a bright coastal horizon, built as a responsive background. */
+.homepage { background:#f7fcff; }
+.homepage .hero { position:relative; overflow:hidden; padding:45px 0 34px; color:var(--oi-navy); background:linear-gradient(180deg,rgba(225,246,255,.76) 0%,rgba(255,255,255,.40) 49%,rgba(133,220,244,.49) 50%,rgba(207,246,255,.70) 100%),linear-gradient(110deg,#e3f8ff 0%,#eaf9ff 49%,#b6eafa 68%,#b9e8f5 100%); border-bottom:1px solid #8ccfe9; }
+.homepage .hero::before { content:""; position:absolute; z-index:0; right:-5%; bottom:17%; width:44%; height:28%; opacity:.42; background:linear-gradient(143deg,transparent 0 26%,#8fc5d3 27% 31%,transparent 32% 42%,#74a9b7 43% 49%,transparent 50%); clip-path:polygon(0 100%,19% 66%,33% 72%,52% 30%,69% 48%,84% 3%,100% 45%,100% 100%); }
+.homepage .hero::after { content:""; position:absolute; z-index:0; bottom:0; left:0; right:0; height:19%; opacity:.43; background:repeating-linear-gradient(177deg,rgba(255,255,255,.9) 0 2px,transparent 3px 14px); }
+.homepage .hero .container { position:relative; z-index:1; max-width:1140px; }.homepage .hero .row { align-items:center; }
+.openimperia-hero-copy { padding:8px 5px 0; }
+.openimperia-hero-kicker { position:relative; margin:0 0 16px; padding-bottom:12px; color:var(--oi-navy); font-size:13px; font-weight:800; letter-spacing:.19em; text-transform:uppercase; }
+.openimperia-hero-kicker::after { content:""; position:absolute; bottom:0; left:0; width:70px; height:5px; background:var(--oi-yellow); }
+.openimperia-hero-title { margin:0 0 12px; color:var(--oi-navy); font-size:clamp(38px,4.2vw,51px); font-weight:800; letter-spacing:-.045em; line-height:1.08; }
+.openimperia-hero-lead { max-width:560px; margin:0 0 16px; color:#124f88; font-size:18px; line-height:1.43; }
+.openimperia-hero-actions { margin:0; }
+.openimperia-hero-actions .btn { padding:10px 22px; border:0; border-radius:7px; background:var(--oi-yellow); color:var(--oi-navy); box-shadow:0 2px 2px rgba(91,91,20,.12); font-size:16px; font-weight:800; }
+.openimperia-hero-actions .btn:hover, .openimperia-hero-actions .btn:focus { background:#ffcf50; color:var(--oi-navy-deep); }
+.openimperia-hero-actions span, .openimperia-text-link span { padding-left:6px; font-size:23px; line-height:10px; vertical-align:-2px; }
 
-/* ---------------------------------------------------------------------
-   Header / navigazione
-   --------------------------------------------------------------------- */
-.account-masthead {
-  background-color: var(--oi-primary);
-  border-bottom: 1px solid #0f568c;
-}
+/* Search panel */
+.openimperia-search { margin:1px 0 0 18px; padding:19px 27px 26px; background:rgba(255,255,255,.96); border:1px solid #a8d6ed; border-radius:7px; box-shadow:0 3px 10px rgba(12,88,132,.12); }
+.openimperia-search h2 { margin:0 0 15px; color:var(--oi-navy); font-size:30px; font-weight:800; letter-spacing:-.03em; }
+.openimperia-search-input { display:flex; }.openimperia-search-input input { min-width:0; width:100%; height:52px; padding:0 16px; border:1px solid #a9d6ec; border-radius:7px 0 0 7px; color:var(--oi-body); font-size:16px; outline:0; }
+.openimperia-search-input input:focus { border-color:var(--oi-blue); box-shadow:inset 0 0 0 1px var(--oi-blue); }
+.openimperia-search-input button { width:59px; height:52px; flex:0 0 59px; border:0; border-radius:0 7px 7px 0; background:var(--oi-blue); color:#fff; }
+.openimperia-search-input svg { width:27px; fill:none; stroke:currentColor; stroke-width:2.6; stroke-linecap:round; }
+.openimperia-advanced-search { display:block; margin-top:20px; padding:11px 12px; border-radius:6px; background:linear-gradient(90deg,#008dbd,#0081b1); color:#fff; font-weight:800; text-align:center; }
+.openimperia-advanced-search:hover, .openimperia-advanced-search:focus { background:var(--oi-navy); color:#fff; text-decoration:none; }.openimperia-advanced-search span { padding-left:5px; font-size:23px; line-height:10px; vertical-align:-2px; }
 
-.masthead {
-  background: #eaf6fc !important;
-  border-bottom: 3px solid var(--oi-primary);
-}
+/* Information cards */
+.module-feeds { padding-top:20px; padding-bottom:20px; background:linear-gradient(110deg,#fff 0%,#f4fbff 100%); border-bottom:1px solid #c1e0ef; }
+.openimperia-card { height:100%; border:1px solid var(--oi-border); border-radius:5px; background:rgba(255,255,255,.94); box-shadow:none; }.openimperia-card-body { display:flex; padding:18px 23px 14px; }
+.openimperia-card-icon { flex:0 0 66px; padding-top:1px; color:#0076b8; }.openimperia-card-icon svg { width:43px; height:43px; fill:none; stroke:currentColor; stroke-width:2.15; stroke-linecap:round; stroke-linejoin:round; }
+.openimperia-card-copy { min-width:0; }.openimperia-card h2 { margin:0 0 8px; color:var(--oi-navy); font-size:24px; font-weight:800; letter-spacing:-.025em; line-height:1.22; }.openimperia-card p { margin-bottom:11px; color:var(--oi-body); font-size:16px; line-height:1.55; }
+.openimperia-text-link { color:var(--oi-blue); font-weight:800; }.openimperia-text-link:hover { color:var(--oi-navy); text-decoration:none; }
 
-/* CKAN applica lo sfondo anche ai contenitori interni della navigazione. */
-.masthead .navbar,
-.masthead .navbar-collapse,
-.masthead .navigation,
-.masthead .section {
-  background-color: #eaf6fc;
-}
+/* Footer */
+.site-footer { padding-top:14px; padding-bottom:28px; background:linear-gradient(110deg,#064678,#053961); border:0; color:rgba(255,255,255,.96); }.site-footer .footer-links { margin-bottom:0; }.site-footer .footer-links li { margin-bottom:2px; }.site-footer a { color:#fff; }.site-footer a:hover, .site-footer a:focus { color:#92e4fc; }.site-footer .attribution { font-size:15px; }.site-footer .attribution p { margin-bottom:5px; }.openimperia-footer-note { max-width:395px; font-size:14px; line-height:1.45; }
 
-.masthead .navbar-toggler {
-  background-color: var(--oi-primary);
-}
-
-.masthead .navbar-toggler:hover,
-.masthead .navbar-toggler:focus {
-  background-color: var(--oi-primary);
-}
-
-.masthead .navbar a,
-.masthead .navbar .nav-link,
-.masthead .navbar h1 a,
-.masthead .navbar h2 {
-  color: var(--oi-primary-darker);
-  font-weight: 600;
-}
-
-.masthead .navbar a:hover,
-.masthead .navbar .nav-link:hover {
-  color: var(--oi-primary);
-}
-
-.masthead .site-search .form-control {
-  border: 1px solid #b8c5d0;
-  box-shadow: none;
-}
-
-.masthead .site-search .btn {
-  background-color: var(--oi-primary);
-  color: #ffffff;
-}
-
-.account-masthead .account ul li a,
-.account-masthead .account ul li a:hover {
-  color: #ffffff;
-}
-
-/* ---------------------------------------------------------------------
-   Home page — hero
-   --------------------------------------------------------------------- */
-.homepage {
-  background-color: #f8fbfd;
-}
-
-.homepage .hero {
-  background: #fbfdff;
-  border-bottom: 1px solid var(--oi-border);
-  color: var(--oi-text);
-  padding: 4.5rem 0 4rem;
-}
-
-.homepage .hero .container {
-  max-width: 1140px;
-}
-
-.homepage .hero .row {
-  align-items: center;
-}
-
-.openimperia-hero-kicker {
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--oi-primary);
-  margin-bottom: 0.75rem;
-}
-
-.openimperia-hero-title {
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.08;
-  margin-bottom: 1.15rem;
-  color: var(--oi-primary-darker);
-}
-
-.openimperia-hero-lead {
-  color: var(--oi-muted);
-  font-size: 1.2rem;
-  max-width: 36rem;
-  margin-bottom: 1.75rem;
-}
-
-.openimperia-hero-actions .btn {
-  border-radius: 3px;
-  font-weight: 700;
-  margin: 0 0.5rem 0.5rem 0;
-  padding: 0.7rem 1.25rem;
-}
-
-.openimperia-hero-actions .btn-primary {
-  background-color: var(--oi-primary);
-  border-color: var(--oi-primary);
-  color: #ffffff;
-}
-
-.openimperia-hero-actions .btn-primary:hover,
-.openimperia-hero-actions .btn-primary:focus {
-  background-color: var(--oi-primary-dark);
-  border-color: var(--oi-primary-dark);
-}
-
-.openimperia-hero-actions .btn-secondary {
-  background-color: #ffffff;
-  border-color: #9eafbd;
-  color: var(--oi-primary-dark);
-}
-
-.openimperia-hero-actions .btn-secondary:hover {
-  background-color: #edf4f8;
-  border-color: var(--oi-primary);
-  color: var(--oi-primary-dark);
-}
-
-/* La ricerca è trattata come un modulo informativo indipendente. */
-.homepage .hero .module-search {
-  background-color: #e4f3fb !important;
-  background-image: none !important;
-  border: 1px solid #b8dce9;
-  border-top: 4px solid var(--oi-primary);
-  box-shadow: 0 8px 22px rgba(23, 50, 77, 0.08);
-  color: var(--oi-text);
-  padding: 1.5rem;
-}
-
-.homepage .hero .module-search .module-content,
-.homepage .hero .module-search .module-content:first-child {
-  background: transparent;
-}
-
-.homepage .hero .module-search .module-heading {
-  color: var(--oi-primary-darker);
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-.homepage .hero .module-search .search-giant input {
-  border: 1px solid #aebdca;
-  color: var(--oi-text);
-}
-
-.homepage .hero .module-search .search-giant .btn {
-  background: var(--oi-primary);
-  color: #ffffff;
-}
-
-/* Argomenti più cercati: azzurro pieno, meno cupo del tema CKAN di base. */
-.tags {
-  background-color: var(--oi-primary);
-}
-
-.tags h3,
-.tags a {
-  color: #ffffff;
-}
-
-.tags a:hover,
-.tags a:focus {
-  color: #dff4fc;
-}
-
-/* ---------------------------------------------------------------------
-   Home page — schede informative
-   --------------------------------------------------------------------- */
-.module-feeds {
-  background-color: #f2f8fc;
-  border-bottom: 1px solid var(--oi-border);
-  padding-top: 3.5rem;
-  padding-bottom: 3.5rem;
-}
-
-.openimperia-card {
-  height: 100%;
-  background: var(--oi-paper);
-  border: 1px solid var(--oi-border);
-  border-left: 4px solid var(--oi-primary);
-  border-radius: 0;
-  box-shadow: 0 2px 7px rgba(23, 50, 77, 0.06);
-}
-
-.openimperia-card-body {
-  padding: 1.7rem 1.85rem;
-}
-
-.openimperia-card h2 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--oi-primary-dark);
-  margin-bottom: 0.75rem;
-}
-
-.openimperia-card p {
-  color: var(--oi-muted);
-}
-
-/* ---------------------------------------------------------------------
-   Footer
-   --------------------------------------------------------------------- */
-.site-footer {
-  background-color: rgb(23, 104, 166);
-  border-top: 3px solid var(--oi-primary);
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.site-footer a {
-  color: #ffffff;
-}
-
-.site-footer a:hover {
-  color: #dff4fc;
-}
-
-.openimperia-footer-note {
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-}
-
-@media (max-width: 767px) {
-  .homepage .hero {
-    padding: 2.75rem 0;
-  }
-
-  .homepage .hero .module-search {
-    margin-top: 2rem;
-  }
-
-  .module-feeds {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
-}
+@media (max-width:767px) { .masthead,.masthead .container { min-height:68px; }.masthead .logo { margin-top:8px; }.masthead .logo img { max-height:49px; max-width:220px; }.masthead .site-search { margin:12px 0; }.homepage .hero { padding:30px 0; }.openimperia-search { margin:25px 0 0; padding:19px; }.openimperia-search h2 { font-size:27px; }.openimperia-hero-lead { font-size:16px; }.module-feeds { padding-top:16px; padding-bottom:16px; }.openimperia-card { margin-bottom:12px; }.openimperia-card-body { padding:18px; }.openimperia-card-icon { flex-basis:53px; }.openimperia-card-icon svg { width:36px; height:36px; }.openimperia-card h2 { font-size:21px; } }

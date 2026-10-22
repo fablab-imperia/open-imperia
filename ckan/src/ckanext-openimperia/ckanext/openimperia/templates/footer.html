@@ -17,12 +17,11 @@
 
 {% block footer_attribution %}
   <p>
-    <strong>Open Data Imperia</strong> &mdash;
-    Fablab Imperia APS
+    <strong>Open Data Imperia</strong> | {{ _("Portale Impresa/APS") }}
   </p>
   <p class="openimperia-footer-note">
-    Portale realizzato con <a href="https://ckan.org" target="_blank" rel="noopener">CKAN</a>.
-    Dati pubblicati con licenza <a href="https://creativecommons.org/licenses/by/4.0/deed.it" target="_blank" rel="noopener">CC BY 4.0</a>
-    salvo diversa indicazione.
+    {{ _("Portale realizzato con") }} <a href="https://ckan.org" target="_blank" rel="noopener">CKAN</a>.
+    {{ _("Dati pubblicati con licenza") }} <a href="https://creativecommons.org/licenses/by/4.0/deed.it" target="_blank" rel="noopener">CC BY 4.0</a>,
+    {{ _("salvo diversa indicazione.") }}
   </p>
 {% endblock %}
