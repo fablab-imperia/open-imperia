@@ -3,19 +3,22 @@
 body { color:var(--oi-body); font-family:"Noto Sans", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif; font-size:15px; line-height:1.55; }
 .visually-hidden, .sr-only { position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-/* Header */
-.account-masthead { min-height:34px; background:linear-gradient(100deg,#064677,var(--oi-navy-deep)); border:0; }
+/* Header: a dark civic utility bar above a calm, high-contrast navigation band. */
+.account-masthead { min-height:34px; background:linear-gradient(100deg,#07517f 0%,var(--oi-navy-deep) 100%); border:0; box-shadow:inset 0 -1px 0 rgba(255,255,255,.16); }
 .account-masthead .account ul li, .account-masthead .account ul li a { border:0; }
-.account-masthead .account ul li a, .account-masthead .account ul li a:hover { color:#fff; font-weight:700; }
-.masthead { min-height:80px; background:linear-gradient(100deg,#eaf6fc,#d8eefa)!important; border:0; box-shadow:0 1px 0 rgba(6,61,120,.12); }
+.account-masthead .account ul li a { color:#fff; font-weight:700; text-shadow:0 1px 1px rgba(0,0,0,.18); }
+.account-masthead .account ul li a:hover, .account-masthead .account ul li a:focus { background:rgba(255,255,255,.16); color:#fff; outline:0; }
+.masthead { min-height:80px; background:#fff!important; border:0; box-shadow:0 2px 7px rgba(6,61,120,.14); }
 .masthead .container { min-height:80px; }
 .masthead .navbar, .masthead .navbar-collapse, .masthead .navigation, .masthead .section { background:transparent; }
 .masthead .logo { margin-top:11px; }.masthead .logo img { max-height:58px; }
-.masthead .navigation .nav-pills>li>a, .masthead .navbar .nav-link, .masthead .navbar a, .masthead .navbar .main-navbar ul li a { color:var(--oi-navy); font-size:16px; font-weight:700; }
-.masthead .navigation .nav-pills>li>a:hover, .masthead .navigation .nav-pills>li.active>a, .masthead .navbar a:hover, .masthead .navbar .main-navbar ul li:hover a, .masthead .navbar .main-navbar ul li:focus a, .masthead .navbar .main-navbar ul li.active a { background:var(--oi-navy); color:#fff; border-radius:.3rem; }
+.masthead .navigation .nav-pills>li>a, .masthead .navbar .nav-link, .masthead .navbar a, .masthead .navbar .main-navbar ul li a { color:var(--oi-navy); font-size:16px; font-weight:700; text-shadow:none; }
+.masthead .navigation .nav-pills>li>a:hover, .masthead .navigation .nav-pills>li>a:focus, .masthead .navigation .nav-pills>li.active>a, .masthead .navbar a:hover, .masthead .navbar a:focus, .masthead .navbar .main-navbar ul li:hover a, .masthead .navbar .main-navbar ul li:focus a, .masthead .navbar .main-navbar ul li.active a { background:var(--oi-navy); color:#fff; border-radius:.3rem; outline:0; }
 .masthead .site-search { margin-top:21px; }
-.masthead .site-search .form-control { height:37px; border:1px solid #b8d7e9; border-radius:7px 0 0 7px; box-shadow:none; color:var(--oi-body); }
-.masthead .site-search .btn { min-width:46px; height:37px; background:var(--oi-blue); border:0; border-radius:0 7px 7px 0; color:#fff; }
+.masthead .site-search .form-control { height:37px; border:1px solid #78b8d8; border-radius:7px 0 0 7px; box-shadow:none; color:var(--oi-body); }
+.masthead .site-search .form-control:focus { border-color:var(--oi-navy); box-shadow:0 0 0 2px rgba(0,141,189,.22); }
+.masthead .site-search .btn { min-width:46px; height:37px; background:#007eac; border:0; border-radius:0 7px 7px 0; color:#fff; }
+.masthead .site-search .btn:hover, .masthead .site-search .btn:focus { background:var(--oi-navy); color:#fff; outline:0; }
 .masthead .navbar-toggler { background:var(--oi-blue); }
 
 /* Hero: a bright coastal horizon, built as a responsive background. */
