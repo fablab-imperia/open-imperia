@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Open Data Imperia</title>
+  <rect width="64" height="64" rx="14" fill="#073b79"/>
+  <circle cx="32" cy="21" r="12" fill="#ffc42e"/>
+  <path d="M10 37c9-6 18-6 27-1 6 3 12 3 18-1-5 10-14 17-25 19-9 1-17-1-23-6 7 1 13-1 19-5-6 1-12 0-16-2Z" fill="#00a1d5"/>
+  <path d="M13 47c8 1 15-1 22-5 6-3 12-3 18-1-6 7-14 11-23 11-7 0-13-2-17-5Z" fill="#006aaf"/>
+  <path d="M11 38c9-4 18-4 27 1 5 3 10 3 15 1" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+</svg>
