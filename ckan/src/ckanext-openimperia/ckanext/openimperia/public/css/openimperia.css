@@ -7,12 +7,12 @@ body { color:var(--oi-body); font-family:"Noto Sans", "Source Sans Pro", "Helvet
 .account-masthead { min-height:34px; background:linear-gradient(100deg,#064677,var(--oi-navy-deep)); border:0; }
 .account-masthead .account ul li, .account-masthead .account ul li a { border:0; }
 .account-masthead .account ul li a, .account-masthead .account ul li a:hover { color:#fff; font-weight:700; }
-.masthead { min-height:80px; background:rgba(255,255,255,.97)!important; border:0; box-shadow:0 1px 0 rgba(6,61,120,.08); }
+.masthead { min-height:80px; background:linear-gradient(100deg,#eaf6fc,#d8eefa)!important; border:0; box-shadow:0 1px 0 rgba(6,61,120,.12); }
 .masthead .container { min-height:80px; }
 .masthead .navbar, .masthead .navbar-collapse, .masthead .navigation, .masthead .section { background:transparent; }
 .masthead .logo { margin-top:11px; }.masthead .logo img { max-height:58px; }
-.masthead .navigation .nav-pills>li>a, .masthead .navbar .nav-link, .masthead .navbar a { color:var(--oi-navy); font-size:16px; font-weight:700; }
-.masthead .navigation .nav-pills>li>a:hover, .masthead .navigation .nav-pills>li.active>a, .masthead .navbar a:hover { background:transparent; color:var(--oi-blue); }
+.masthead .navigation .nav-pills>li>a, .masthead .navbar .nav-link, .masthead .navbar a, .masthead .navbar .main-navbar ul li a { color:var(--oi-navy); font-size:16px; font-weight:700; }
+.masthead .navigation .nav-pills>li>a:hover, .masthead .navigation .nav-pills>li.active>a, .masthead .navbar a:hover, .masthead .navbar .main-navbar ul li:hover a, .masthead .navbar .main-navbar ul li:focus a, .masthead .navbar .main-navbar ul li.active a { background:var(--oi-navy); color:#fff; border-radius:.3rem; }
 .masthead .site-search { margin-top:21px; }
 .masthead .site-search .form-control { height:37px; border:1px solid #b8d7e9; border-radius:7px 0 0 7px; box-shadow:none; color:var(--oi-body); }
 .masthead .site-search .btn { min-width:46px; height:37px; background:var(--oi-blue); border:0; border-radius:0 7px 7px 0; color:#fff; }
