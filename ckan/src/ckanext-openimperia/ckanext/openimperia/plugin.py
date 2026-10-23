@@ -19,6 +19,7 @@ DEFAULT_ORGANIZATION = {
 DEFAULT_SITE_TITLE = "Open Data Imperia"
 DEFAULT_SITE_DESCRIPTION = "Portale open data del territorio di Imperia"
 DEFAULT_SITE_LOGO = "/images/openimperia-logo.svg"
+DEFAULT_SITE_FAVICON = "/images/openimperia-icon.svg"
 DEFAULT_SITE_INTRO = (
     "I dati aperti del territorio di Imperia: informazioni pubbliche "
     "rilasciate in formati aperti, liberamente riutilizzabili da cittadini, "
@@ -34,6 +35,7 @@ BRANDING = {
     "ckan.site_title": ("CKAN", DEFAULT_SITE_TITLE),
     "ckan.site_description": ("", DEFAULT_SITE_DESCRIPTION),
     "ckan.site_logo": ("/base/images/ckan-logo.png", DEFAULT_SITE_LOGO),
+    "ckan.favicon": ("/base/images/ckan.ico", DEFAULT_SITE_FAVICON),
     "ckan.site_intro_text": ("", DEFAULT_SITE_INTRO),
     "ckan.locale_default": ("en", DEFAULT_LOCALE),
 }
