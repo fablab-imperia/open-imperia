@@ -38,25 +38,25 @@ class CKANClient:
     def package_show(self, name: str):
         return self.action("package_show", {"id": name})
 
- def upsert_dataset(self, dataset: Dataset):
-        payload = {
-            "name": dataset.name,
-            "title": dataset.title,
-            "notes": dataset.notes,
-            "tags": dataset.tags,
-            "extras": dataset.extras,
-            "resources": dataset.resources,
-        }
+    def upsert_dataset(self, dataset: Dataset):
+            payload = {
+                "name": dataset.name,
+                "title": dataset.title,
+                "notes": dataset.notes,
+                "tags": dataset.tags,
+                "extras": dataset.extras,
+                "resources": dataset.resources,
+            }
 
-        org = os.getenv("CKAN_ORGANIZATION")
-        if org:
-            payload["owner_org"] = org
+            org = os.getenv("CKAN_ORGANIZATION")
+            if org:
+                payload["owner_org"] = org
 
-        try:
-            self.package_show(dataset.name)
-        except requests.HTTPError as exc:
-            if exc.response is None or exc.response.status_code != 404:
-                raise
-            return self.action("package_create", payload)
+            try:
+                self.package_show(dataset.name)
+            except requests.HTTPError as exc:
+                if exc.response is None or exc.response.status_code != 404:
+                    raise
+                return self.action("package_create", payload)
 
-        return self.action("package_update", payload)
+            return self.action("package_update", payload)
