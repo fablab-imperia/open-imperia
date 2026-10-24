@@ -38,7 +38,7 @@ class CKANClient:
     def package_show(self, name: str):
         return self.action("package_show", {"id": name})
 
-    def upsert_dataset(self, dataset: Dataset):
+ def upsert_dataset(self, dataset: Dataset):
         payload = {
             "name": dataset.name,
             "title": dataset.title,
@@ -47,6 +47,10 @@ class CKANClient:
             "extras": dataset.extras,
             "resources": dataset.resources,
         }
+
+        org = os.getenv("CKAN_ORGANIZATION")
+        if org:
+            payload["owner_org"] = org
 
         try:
             self.package_show(dataset.name)
