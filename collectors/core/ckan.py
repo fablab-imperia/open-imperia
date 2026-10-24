@@ -39,7 +39,7 @@ class CKANClient:
         return self.action("package_show", {"id": name})
 
     def upsert_dataset(self, dataset: Dataset):
-            payload = {
+        payload = {
                 "name": dataset.name,
                 "title": dataset.title,
                 "notes": dataset.notes,
