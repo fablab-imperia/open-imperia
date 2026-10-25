@@ -109,6 +109,7 @@ services:
       # URL pubblico: Caddy termina TLS e inoltra a ckan:5000.
       - CKAN_SITE_URL=${CKAN_SITE_URL:-https://dati.fablabimperia.org}
       - UWSGI_HARAKIRI=60
+      - CKAN__DATAPUSHER__API_TOKEN=${CKAN_API_KEY}
     depends_on:
       db:
         condition: service_healthy

@@ -1,5 +1,6 @@
 import os
 import re
+import time
 from urllib.parse import urljoin
 
 import requests
@@ -14,6 +15,7 @@ class CKANClient:
         self.timeout = timeout
         self.session = requests.Session()
         self.session.headers.update({"Authorization": api_key})
+        self._datapusher_wait_disabled = False
 
     @classmethod
     def from_environment(cls):
@@ -38,6 +40,24 @@ class CKANClient:
 
     def package_show(self, name: str):
         return self.action("package_show", {"id": name})
+
+    def wait_for_datapusher(self, resource_id: str, timeout: int = 120):
+        if self._datapusher_wait_disabled:
+            return None
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            try:
+                result = self.action(
+                    "datapusher_status", {"resource_id": resource_id}
+                )
+            except requests.HTTPError:
+                return None
+            status = result.get("status")
+            if status in ("complete", "error"):
+                return status
+            time.sleep(1)
+        self._datapusher_wait_disabled = True
+        return None
 
     def upload_resource(self, package_id: str, resource: dict, existing=None):
         """Create or replace a CKAN resource and upload its CSV contents."""
@@ -75,7 +95,9 @@ class CKANClient:
         result = response.json()
         if not result.get("success"):
             raise RuntimeError(f"CKAN action failed: {result}")
-        return result["result"]
+        uploaded = result["result"]
+        self.wait_for_datapusher(uploaded["id"])
+        return uploaded
 
     def upsert_dataset(self, dataset: Dataset):
         uploaded_resources = [
