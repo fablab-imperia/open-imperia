@@ -59,10 +59,16 @@ class CKANClient:
             action = "resource_create"
 
         endpoint = urljoin(self.base_url, f"api/3/action/{action}")
+        # Drop any idle keep-alive connection before the upload: uWSGI may
+        # close pooled connections between the metadata calls and this
+        # multipart request, which surfaces as RemoteDisconnected. Forcing a
+        # fresh connection avoids reusing a socket the server already closed.
+        self.session.close()
         response = self.session.post(
             endpoint,
             data=payload,
             files={"upload": (filename, csv_content.encode("utf-8"), "text/csv")},
+            headers={"Connection": "close"},
             timeout=self.timeout,
         )
         response.raise_for_status()
@@ -81,16 +87,16 @@ class CKANClient:
             "notes": dataset.notes,
             "tags": dataset.tags,
             "extras": dataset.extras,
+            # Collector datasets are open data and must be publicly visible.
+            "private": False,
         }
-        # Upload file resources separately as multipart requests. Keep any
-        # metadata-only resources in the package action for compatibility.
+        # Upload file resources separately as multipart requests. Include any
+        # metadata-only resources in package_create for compatibility.
         metadata_resources = [
             {key: value for key, value in resource.items() if key != "csv_content"}
             for resource in dataset.resources
             if "csv_content" not in resource
         ]
-        if metadata_resources:
-            payload["resources"] = metadata_resources
 
         org = os.getenv("CKAN_ORGANIZATION")
         if org:
@@ -101,10 +107,18 @@ class CKANClient:
         except requests.HTTPError as exc:
             if exc.response is None or exc.response.status_code != 404:
                 raise
+            if metadata_resources:
+                payload["resources"] = metadata_resources
             package = self.action("package_create", payload)
             existing_resources = []
         else:
-            package = self.action("package_update", payload)
+            # package_update replaces the resource list, deleting resources
+            # that are not included in the payload. package_patch leaves them
+            # untouched, so the files uploaded below can update them safely.
+            package = self.action(
+                "package_patch",
+                {"id": existing_package["id"], **payload},
+            )
             existing_resources = existing_package.get("resources", [])
 
         for resource in uploaded_resources:
