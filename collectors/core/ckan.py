@@ -1,4 +1,5 @@
 import os
+import re
 from urllib.parse import urljoin
 
 import requests
@@ -38,25 +39,79 @@ class CKANClient:
     def package_show(self, name: str):
         return self.action("package_show", {"id": name})
 
+    def upload_resource(self, package_id: str, resource: dict, existing=None):
+        """Create or replace a CKAN resource and upload its CSV contents."""
+        csv_content = resource["csv_content"]
+        filename = re.sub(r"[^A-Za-z0-9._-]+", "-", resource["name"]).strip("-")
+        if not filename.lower().endswith(".csv"):
+            filename += ".csv"
+
+        payload = {
+            key: value
+            for key, value in resource.items()
+            if key != "csv_content" and value is not None
+        }
+        payload["package_id"] = package_id
+        if existing:
+            payload["id"] = existing["id"]
+            action = "resource_update"
+        else:
+            action = "resource_create"
+
+        endpoint = urljoin(self.base_url, f"api/3/action/{action}")
+        response = self.session.post(
+            endpoint,
+            data=payload,
+            files={"upload": (filename, csv_content.encode("utf-8"), "text/csv")},
+            timeout=self.timeout,
+        )
+        response.raise_for_status()
+        result = response.json()
+        if not result.get("success"):
+            raise RuntimeError(f"CKAN action failed: {result}")
+        return result["result"]
+
     def upsert_dataset(self, dataset: Dataset):
+        uploaded_resources = [
+            resource for resource in dataset.resources if "csv_content" in resource
+        ]
         payload = {
             "name": dataset.name,
             "title": dataset.title,
             "notes": dataset.notes,
             "tags": dataset.tags,
             "extras": dataset.extras,
-            "resources": dataset.resources,
         }
+        # Upload file resources separately as multipart requests. Keep any
+        # metadata-only resources in the package action for compatibility.
+        metadata_resources = [
+            {key: value for key, value in resource.items() if key != "csv_content"}
+            for resource in dataset.resources
+            if "csv_content" not in resource
+        ]
+        if metadata_resources:
+            payload["resources"] = metadata_resources
 
         org = os.getenv("CKAN_ORGANIZATION")
         if org:
             payload["owner_org"] = org
 
         try:
-            self.package_show(dataset.name)
+            existing_package = self.package_show(dataset.name)
         except requests.HTTPError as exc:
             if exc.response is None or exc.response.status_code != 404:
                 raise
-            return self.action("package_create", payload)
+            package = self.action("package_create", payload)
+            existing_resources = []
+        else:
+            package = self.action("package_update", payload)
+            existing_resources = existing_package.get("resources", [])
 
-        return self.action("package_update", payload)
+        for resource in uploaded_resources:
+            existing = next(
+                (item for item in existing_resources if item.get("name") == resource["name"]),
+                None,
+            )
+            self.upload_resource(package["id"], resource, existing=existing)
+
+        return package

@@ -1,3 +1,6 @@
+import csv
+from io import StringIO
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -39,29 +42,22 @@ class RivieracquaImperiaSource(DataSource):
             if "PUNTI DI PRELIEVO" not in table_text and "PARAMETRI" not in table_text:
                 continue
 
-            # Try to extract point names from header row
-            headers = []
-            for th in table.find_all("th"):
-                headers.append(th.get_text(strip=True))
-            # If no th, look at first row
-            if not headers:
-                first_row = table.find("tr")
-                if first_row:
-                    for td in first_row.find_all(["td", "th"]):
-                        headers.append(td.get_text(strip=True))
-
-            # Convert table to CSV-like string for resource
+            # Keep cells as values and let csv.writer quote delimiters,
+            # quotes, and newlines correctly.
             rows = []
             for tr in table.find_all("tr"):
                 cells = []
                 for td in tr.find_all(["td", "th"]):
-                    cells.append(td.get_text(strip=True).replace("\n", " "))
+                    cells.append(" ".join(td.get_text(" ", strip=True).split()))
                 if cells:
-                    rows.append(";".join(cells))
+                    rows.append(cells)
             if not rows:
                 continue
 
-            csv_content = "\n".join(rows)
+            output = StringIO(newline="")
+            writer = csv.writer(output)
+            writer.writerows(rows)
+            csv_content = output.getvalue()
 
             # Determine a name for this table
             name = "qualita-acqua"
@@ -80,7 +76,7 @@ class RivieracquaImperiaSource(DataSource):
                     "format": "CSV",
                     "mimetype": "text/csv",
                     "description": context_text or "Tabella qualità dell'acqua - Rivieracqua",
-                    "url": self.URL,
+                    "csv_content": csv_content,
                 }
             )
 
