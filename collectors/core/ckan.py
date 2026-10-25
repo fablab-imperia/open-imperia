@@ -115,10 +115,10 @@ class CKANClient:
             # package_update replaces the resource list, deleting resources
             # that are not included in the payload. package_patch leaves them
             # untouched, so the files uploaded below can update them safely.
-            package = self.action(
-                "package_patch",
-                {"id": existing_package["id"], **payload},
-            )
+            patch_payload = {"id": existing_package["id"], **payload}
+            if existing_package.get("state") == "deleted":
+                patch_payload["state"] = "active"
+            package = self.action("package_patch", patch_payload)
             existing_resources = existing_package.get("resources", [])
 
         for resource in uploaded_resources:
