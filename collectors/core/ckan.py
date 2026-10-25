@@ -27,11 +27,19 @@ class CKANClient:
 
     def action(self, name: str, payload: dict):
         endpoint = urljoin(self.base_url, f"api/3/action/{name}")
-        response = self.session.post(
-            endpoint,
-            json=payload,
-            timeout=self.timeout,
-        )
+        for attempt in range(2):
+            try:
+                response = self.session.post(
+                    endpoint,
+                    json=payload,
+                    timeout=self.timeout,
+                )
+                break
+            except requests.ConnectionError:
+                self.session.close()
+                if attempt == 1:
+                    raise
+                time.sleep(1)
         response.raise_for_status()
         result = response.json()
         if not result.get("success"):
@@ -52,6 +60,10 @@ class CKANClient:
                 )
             except requests.HTTPError:
                 return None
+            except requests.RequestException:
+                self.session.close()
+                time.sleep(1)
+                continue
             status = result.get("status")
             if status in ("complete", "error"):
                 return status
